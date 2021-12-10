@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import s from './Searchbar.module.css';
 
+// Your API key: 24048830-4cc4486dcdd2cd17ebea2a9c8
+
 function Searchbar({ onSubmit }) {
   return (
     <header className={s.searchbar}>

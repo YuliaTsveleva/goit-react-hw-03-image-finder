@@ -3,9 +3,15 @@ import PropTypes from 'prop-types';
 import s from './Modal.module.css';
 
 function Modal() {
-    return()
+  return (
+    <div className={s.overlay}>
+      <div className={s.modal}>
+        <img src="" alt="" />
+      </div>
+    </div>
+  );
 }
 
 export default Modal;
 
-Modal.propTypes={}
+Modal.propTypes = {};
