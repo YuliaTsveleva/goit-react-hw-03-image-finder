@@ -26,7 +26,7 @@ class ImageGallery extends Component {
         page: 1,
         images: [],
       });
-      this.fetchImages();
+      this.fetchImages(1);
     }
   }
 
@@ -41,12 +41,12 @@ class ImageGallery extends Component {
   loadMore = () => {
     this.setState({ loading: true });
     this.toSetPage();
-    this.fetchImages();
+    this.fetchImages(this.state.page);
   };
 
-  fetchImages = () => {
+  fetchImages = page => {
     const newQuery = this.props.imageName;
-    const page = this.state.page;
+    // const page = this.state.page;
     setTimeout(() => {
       fetch(
         `https://pixabay.com/api/?q=${newQuery}&page=1&key=24048830-4cc4486dcdd2cd17ebea2a9c8&image_type=photo&orientation=horizontal&page=${page}&per_page=12`,
