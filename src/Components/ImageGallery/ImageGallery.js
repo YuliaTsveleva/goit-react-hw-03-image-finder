@@ -80,7 +80,10 @@ class ImageGallery extends Component {
             };
           });
           if (this.state.images.length === 0) {
-            return toast.error('No images with this name!');
+            return toast.error('No images matching your request!');
+          }
+          if (this.state.images.length > 0 && images.length === 0) {
+            return toast.info('No more images matching your request!');
           }
         })
         .catch(error => this.setState({ error, status: 'rejected' }));

@@ -15,7 +15,7 @@ class Searchbar extends Component {
   handleSubmit = e => {
     e.preventDefault();
     if (this.state.imageName.trim() === '') {
-      return toast.error('Enter your request please!');
+      return toast.warning('Enter your request please!');
     }
     this.props.onSubmit(this.state.imageName);
     this.setState({ imageName: '' });
