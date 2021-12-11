@@ -28,7 +28,6 @@ class Searchbar extends Component {
           <button type="submit" className={s.SearchFormButton}>
             <span className={s.SearchFormButtonLabel}>
               <AiOutlineSearch size={30} />
-              {/* Search */}
             </span>
           </button>
 

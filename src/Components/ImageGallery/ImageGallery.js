@@ -24,8 +24,13 @@ class ImageGallery extends Component {
         images: [],
       });
     }
+
     this.fetchImages();
   }
+
+  // toResetPage = () => {
+  //   this.setState({ page: 1 });
+  // };
 
   toSetPage = () => {
     this.setState(prevState => {
@@ -67,6 +72,7 @@ class ImageGallery extends Component {
               tags: image.tags,
             };
           });
+
           this.setState({ images: images, status: 'resolved' });
         })
         .catch(error => this.setState({ error, status: 'rejected' }));
