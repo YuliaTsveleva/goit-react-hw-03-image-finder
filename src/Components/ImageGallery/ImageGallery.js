@@ -30,7 +30,6 @@ class ImageGallery extends Component {
   }
 
   render() {
-    console.log(this.state);
     const { images } = this.state;
     return (
       <>
