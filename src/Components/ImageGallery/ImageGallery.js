@@ -8,6 +8,7 @@ import PreView from '../PreView/PreView';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { nanoid } from 'nanoid';
+import fetchImages from '../../services/apiService';
 
 class ImageGallery extends Component {
   state = {
@@ -27,7 +28,7 @@ class ImageGallery extends Component {
         page: 1,
         images: [],
       });
-      this.fetchImages(1);
+      this.fetchGallery(1);
     }
   }
 
@@ -42,52 +43,40 @@ class ImageGallery extends Component {
   loadMore = () => {
     this.setState({ loading: true });
     this.toSetPage();
-    this.fetchImages(this.state.page);
+    this.fetchGallery(this.state.page);
   };
 
-  fetchImages = page => {
+  fetchGallery = page => {
     const newQuery = this.props.imageName;
-    // const page = this.state.page;
-    setTimeout(() => {
-      fetch(
-        `https://pixabay.com/api/?q=${newQuery}&page=1&key=24048830-4cc4486dcdd2cd17ebea2a9c8&image_type=photo&orientation=horizontal&page=${page}&per_page=12`,
-      )
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          }
-          return Promise.reject(
-            new Error(`No image with this name ${newQuery}`),
-          );
-        })
-        .then(data => data.hits)
-        .then(data => {
-          const images = data.map(image => {
-            return {
-              id: image.id,
-              webformatURL: image.webformatURL,
-              largeImageURL: image.largeImageURL,
-              tags: image.tags,
-            };
-          });
+    // setTimeout(() => {
+    fetchImages(newQuery, page)
+      .then(data => {
+        const images = data.map(image => {
+          return {
+            id: image.id,
+            webformatURL: image.webformatURL,
+            largeImageURL: image.largeImageURL,
+            tags: image.tags,
+          };
+        });
 
-          this.setState(prevState => {
-            return {
-              images: [...prevState.images, ...images],
-              status: 'resolved',
-              page: prevState.page + 1,
-              loading: false,
-            };
-          });
-          if (this.state.images.length === 0) {
-            return toast.error('No images matching your request!');
-          }
-          if (this.state.images.length > 0 && images.length === 0) {
-            return toast.info('No more images matching your request!');
-          }
-        })
-        .catch(error => this.setState({ error, status: 'rejected' }));
-    }, 1000);
+        this.setState(prevState => {
+          return {
+            images: [...prevState.images, ...images],
+            status: 'resolved',
+            page: prevState.page + 1,
+            loading: false,
+          };
+        });
+        if (this.state.images.length === 0) {
+          return toast.error('No images matching your request!');
+        }
+        if (this.state.images.length > 0 && images.length === 0) {
+          return toast.info('No more images matching your request!');
+        }
+      })
+      .catch(error => this.setState({ error, status: 'rejected' }));
+    // }, 1000);
   };
 
   render() {
