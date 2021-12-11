@@ -7,6 +7,7 @@ import Loader from '../Loader/Loader';
 import PreView from '../PreView/PreView';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { nanoid } from 'nanoid';
 
 class ImageGallery extends Component {
   state = {
@@ -38,7 +39,8 @@ class ImageGallery extends Component {
     });
   };
 
-  loadMore = () => {
+  loadMore = e => {
+    console.dir(e.target);
     this.setState({ loading: true });
     this.toSetPage();
     this.fetchImages(this.state.page);
@@ -108,13 +110,13 @@ class ImageGallery extends Component {
             {images &&
               images.map(image => (
                 <ImageGalleryItem
-                  key={image.id}
+                  key={nanoid()}
                   src={image.webformatURL}
                   alt={image.tags}
                 />
               ))}
           </ul>
-          {images.length > 0 && <Button loadMore={this.loadMore} />}
+          {images.length > 0 && !loading && <Button loadMore={this.loadMore} />}
           {loading && <Loader />}
         </>
       );

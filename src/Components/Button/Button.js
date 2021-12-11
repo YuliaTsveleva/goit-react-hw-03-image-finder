@@ -4,7 +4,7 @@ import s from './Button.module.css';
 
 function Button({ loadMore }) {
   return (
-    <button onClick={loadMore} type="button" className={s.Button}>
+    <button id="loadMore" onClick={loadMore} type="button" className={s.Button}>
       Load more
     </button>
   );
