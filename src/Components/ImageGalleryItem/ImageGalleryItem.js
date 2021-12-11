@@ -2,14 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import s from './ImageGalleryItem.module.css';
 
-function ImageGalleryItem() {
+function ImageGalleryItem({ src, alt }) {
   return (
     <li className={s.galleryItem}>
-      <img src="" alt="" />
+      <img src={src} alt={alt} />
     </li>
   );
 }
 
 export default ImageGalleryItem;
 
-ImageGalleryItem.propTypes = {};
+ImageGalleryItem.propTypes = {
+  src: PropTypes.string,
+  alt: PropTypes.string,
+};
