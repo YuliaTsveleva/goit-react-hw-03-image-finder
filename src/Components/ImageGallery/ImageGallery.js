@@ -23,19 +23,14 @@ class ImageGallery extends Component {
         page: 1,
         images: [],
       });
+      this.fetchImages();
     }
-
-    this.fetchImages();
   }
-
-  // toResetPage = () => {
-  //   this.setState({ page: 1 });
-  // };
 
   toSetPage = () => {
     this.setState(prevState => {
       if (this.state.images.length > 1) {
-        return { page: prevState.page + 1 };
+        return { page: prevState.page };
       }
     });
   };
@@ -50,9 +45,7 @@ class ImageGallery extends Component {
     const page = this.state.page;
     setTimeout(() => {
       fetch(
-        `https://pixabay.com/api/?q=${newQuery}&page=1&key=24048830-4cc4486dcdd2cd17ebea2a9c8&image_type=photo&orientation=horizontal&page=${1}&per_page=${
-          page * 12
-        }`,
+        `https://pixabay.com/api/?q=${newQuery}&page=1&key=24048830-4cc4486dcdd2cd17ebea2a9c8&image_type=photo&orientation=horizontal&page=${page}&per_page=12`,
       )
         .then(response => {
           if (response.ok) {
@@ -73,7 +66,13 @@ class ImageGallery extends Component {
             };
           });
 
-          this.setState({ images: images, status: 'resolved' });
+          this.setState(prevState => {
+            return {
+              images: [...prevState.images, ...images],
+              status: 'resolved',
+              page: prevState.page + 1,
+            };
+          });
         })
         .catch(error => this.setState({ error, status: 'rejected' }));
     }, 1000);
