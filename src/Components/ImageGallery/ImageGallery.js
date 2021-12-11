@@ -5,6 +5,8 @@ import Button from '../Button/Button';
 import ErrorView from '../ErrorView/ErrorView';
 import Loader from '../Loader/Loader';
 import PreView from '../PreView/PreView';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class ImageGallery extends Component {
   state = {
@@ -12,6 +14,7 @@ class ImageGallery extends Component {
     page: 1,
     error: null,
     status: 'idle',
+    loading: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -36,6 +39,7 @@ class ImageGallery extends Component {
   };
 
   loadMore = () => {
+    this.setState({ loading: true });
     this.toSetPage();
     this.fetchImages();
   };
@@ -71,15 +75,19 @@ class ImageGallery extends Component {
               images: [...prevState.images, ...images],
               status: 'resolved',
               page: prevState.page + 1,
+              loading: false,
             };
           });
+          if (this.state.images.length === 0) {
+            return toast.error('No images with this name!');
+          }
         })
         .catch(error => this.setState({ error, status: 'rejected' }));
     }, 1000);
   };
 
   render() {
-    const { images, error, status } = this.state;
+    const { images, error, status, loading } = this.state;
 
     if (status === 'idle') {
       return <PreView />;
@@ -107,6 +115,7 @@ class ImageGallery extends Component {
               ))}
           </ul>
           {images.length > 0 && <Button loadMore={this.loadMore} />}
+          {loading && <Loader />}
         </>
       );
     }
