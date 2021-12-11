@@ -2,13 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import s from './Button.module.css';
 
-function Button() {
+function Button({ loadMore }) {
   return (
-    <button type="button" className={s.button}>
+    <button onClick={loadMore} type="button" className={s.Button}>
       Load more
     </button>
   );
 }
 export default Button;
 
-Button.propTypes = {};
+Button.propTypes = {
+  loadMore: PropTypes.func,
+};

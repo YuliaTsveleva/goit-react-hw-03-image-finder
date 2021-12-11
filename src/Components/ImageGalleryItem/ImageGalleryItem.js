@@ -4,8 +4,8 @@ import s from './ImageGalleryItem.module.css';
 
 function ImageGalleryItem({ src, alt }) {
   return (
-    <li className={s.galleryItem}>
-      <img src={src} alt={alt} />
+    <li className={s.ImageGalleryItem}>
+      <img src={src} alt={alt} className={s.ImageGalleryItemImage} />
     </li>
   );
 }
