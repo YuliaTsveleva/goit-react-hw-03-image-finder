@@ -39,8 +39,7 @@ class ImageGallery extends Component {
     });
   };
 
-  loadMore = e => {
-    console.dir(e.target);
+  loadMore = () => {
     this.setState({ loading: true });
     this.toSetPage();
     this.fetchImages(this.state.page);
