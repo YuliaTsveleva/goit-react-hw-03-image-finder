@@ -19,7 +19,8 @@ function ImageGalleryItem({ src, alt, onClick, id }) {
 export default ImageGalleryItem;
 
 ImageGalleryItem.propTypes = {
-  src: PropTypes.string,
-  alt: PropTypes.string,
+  id: PropTypes.number.isRequired,
+  src: PropTypes.string.isRequired,
+  alt: PropTypes.string.isRequired,
   onClick: PropTypes.func,
 };

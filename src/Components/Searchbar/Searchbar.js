@@ -9,12 +9,12 @@ class Searchbar extends Component {
   };
 
   handleNameChange = e => {
-    this.setState({ imageName: e.currentTarget.value.toLowerCase() });
+    this.setState({ imageName: e.currentTarget.value });
   };
 
   handleSubmit = e => {
     e.preventDefault();
-    if (this.state.imageName.trim() === '') {
+    if (this.state.imageName.toLowerCase().trim() === '') {
       return toast.warning('Enter your request please!');
     }
     this.props.onSubmit(this.state.imageName);
