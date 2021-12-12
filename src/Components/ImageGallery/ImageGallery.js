@@ -23,10 +23,6 @@ class ImageGallery extends Component {
     modalAlt: '',
   };
 
-  componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyDown);
-  }
-
   componentDidUpdate(prevProps, prevState) {
     const prevQuery = prevProps.imageName;
     const newQuery = this.props.imageName;
@@ -38,10 +34,6 @@ class ImageGallery extends Component {
       });
       this.fetchGallery(1);
     }
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeyDown);
   }
 
   toSetPage = () => {
@@ -60,59 +52,61 @@ class ImageGallery extends Component {
 
   fetchGallery = page => {
     const newQuery = this.props.imageName;
-    // setTimeout(() => {
-    fetchImages(newQuery, page)
-      .then(data => {
-        const images = data.map(image => {
-          return {
-            id: image.id,
-            webformatURL: image.webformatURL,
-            largeImageURL: image.largeImageURL,
-            tags: image.tags,
-          };
-        });
+    setTimeout(() => {
+      fetchImages(newQuery, page)
+        .then(data => {
+          const images = data.map(image => {
+            return {
+              id: image.id,
+              webformatURL: image.webformatURL,
+              largeImageURL: image.largeImageURL,
+              tags: image.tags,
+            };
+          });
 
-        this.setState(prevState => {
-          return {
-            images: [...prevState.images, ...images],
-            status: 'resolved',
-            page: prevState.page + 1,
-            loading: false,
-          };
-        });
-        if (this.state.images.length === 0) {
-          return toast.error('No images matching your request!');
-        }
-        if (this.state.images.length > 0 && images.length === 0) {
-          return toast.info('No more images matching your request!');
-        }
-      })
-      .catch(error => this.setState({ error, status: 'rejected' }));
-    // }, 1000);
+          this.setState(prevState => {
+            return {
+              images: [...prevState.images, ...images],
+              status: 'resolved',
+              page: prevState.page + 1,
+              loading: false,
+            };
+          });
+          if (this.state.images.length === 0) {
+            return toast.error('No images matching your request!');
+          }
+          if (this.state.images.length > 0 && images.length === 0) {
+            return toast.info('No more images matching your request!');
+          }
+        })
+        .catch(error => this.setState({ error, status: 'rejected' }));
+    }, 1000);
   };
 
-  openModal = e => {
-    const targetId = +e.target.id;
-    const targetIndex = this.state.images.findIndex(
-      image => image.id === targetId,
-    );
+  openModal = () => {
     this.setState({
       showModal: true,
-      modalUrl: this.state.images[targetIndex].largeImageURL,
-      modalAlt: this.state.images[targetIndex].tags,
     });
   };
 
-  closeModal = e => {
-    if (e.target === e.currentTarget) {
-      this.setState({ showModal: false });
-    }
+  handleSelectImage = e => {
+    const targetIndex = this.state.images.findIndex(
+      image => image.id === +e.target.id,
+    );
+    const targetImage = this.state.images[targetIndex];
+    this.setState({
+      modalUrl: targetImage.largeImageURL,
+      modalAlt: targetImage.tags,
+    });
+    this.openModal();
   };
 
-  handleKeyDown = e => {
-    if (e.code === 'Escape' && this.state.showModal === true) {
-      this.setState({ showModal: false });
-    }
+  closeModal = () => {
+    this.setState({
+      showModal: false,
+      modalUrl: '',
+      modalAlt: '',
+    });
   };
 
   render() {
@@ -142,12 +136,17 @@ class ImageGallery extends Component {
                   id={image.id}
                   src={image.webformatURL}
                   alt={image.tags}
-                  onClick={this.openModal}
+                  onClick={this.handleSelectImage}
                 />
               ))}
           </ul>
           {showModal && (
-            <Modal toClose={this.closeModal} src={modalUrl} alt={modalAlt} />
+            <Modal
+              toClose={this.closeModal}
+              src={modalUrl}
+              alt={modalAlt}
+              isShow={showModal}
+            />
           )}
           {images.length > 0 && !loading && <Button loadMore={this.loadMore} />}
           {loading && <Loader />}
