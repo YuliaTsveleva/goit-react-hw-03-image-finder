@@ -44,12 +44,6 @@ class ImageGallery extends Component {
     window.removeEventListener('keydown', this.handleKeyDown);
   }
 
-  handleKeyDown = e => {
-    if (e.code === 'Escape' && this.state.showModal === true) {
-      this.closeModal();
-    }
-  };
-
   toSetPage = () => {
     this.setState(prevState => {
       if (this.state.images.length > 1) {
@@ -111,6 +105,12 @@ class ImageGallery extends Component {
 
   closeModal = e => {
     if (e.target === e.currentTarget) {
+      this.setState({ showModal: false });
+    }
+  };
+
+  handleKeyDown = e => {
+    if (e.code === 'Escape' && this.state.showModal === true) {
       this.setState({ showModal: false });
     }
   };
