@@ -48,6 +48,16 @@ class ImageGallery extends Component {
     this.setState({ loading: true });
     this.toSetPage();
     this.fetchGallery(this.state.page);
+    this.toSmoothScroll();
+  };
+
+  toSmoothScroll = () => {
+    setTimeout(() => {
+      window.scrollBy({
+        top: document.documentElement.clientHeight,
+        behavior: 'smooth',
+      });
+    }, 1000);
   };
 
   fetchGallery = page => {
