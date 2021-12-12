@@ -23,6 +23,10 @@ class ImageGallery extends Component {
     modalAlt: '',
   };
 
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleKeyDown);
+  }
+
   componentDidUpdate(prevProps, prevState) {
     const prevQuery = prevProps.imageName;
     const newQuery = this.props.imageName;
@@ -35,6 +39,16 @@ class ImageGallery extends Component {
       this.fetchGallery(1);
     }
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyDown);
+  }
+
+  handleKeyDown = e => {
+    if (e.code === 'Escape' && this.state.showModal === true) {
+      this.closeModal();
+    }
+  };
 
   toSetPage = () => {
     this.setState(prevState => {
@@ -88,7 +102,6 @@ class ImageGallery extends Component {
     const targetIndex = this.state.images.findIndex(
       image => image.id === targetId,
     );
-    console.log(targetIndex);
     this.setState({
       showModal: true,
       modalUrl: this.state.images[targetIndex].largeImageURL,
@@ -96,8 +109,10 @@ class ImageGallery extends Component {
     });
   };
 
-  closeModal = () => {
-    this.setState({ showModal: false });
+  closeModal = e => {
+    if (e.target === e.currentTarget) {
+      this.setState({ showModal: false });
+    }
   };
 
   render() {
