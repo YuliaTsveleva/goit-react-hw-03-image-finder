@@ -52,35 +52,35 @@ class ImageGallery extends Component {
 
   fetchGallery = page => {
     const newQuery = this.props.imageName;
-    setTimeout(() => {
-      fetchImages(newQuery, page)
-        .then(data => {
-          const images = data.map(image => {
-            return {
-              id: image.id,
-              webformatURL: image.webformatURL,
-              largeImageURL: image.largeImageURL,
-              tags: image.tags,
-            };
-          });
+    // setTimeout(() => {
+    fetchImages(newQuery, page)
+      .then(data => {
+        const images = data.map(image => {
+          return {
+            id: image.id,
+            webformatURL: image.webformatURL,
+            largeImageURL: image.largeImageURL,
+            tags: image.tags,
+          };
+        });
 
-          this.setState(prevState => {
-            return {
-              images: [...prevState.images, ...images],
-              status: 'resolved',
-              page: prevState.page + 1,
-              loading: false,
-            };
-          });
-          if (this.state.images.length === 0) {
-            return toast.error('No images matching your request!');
-          }
-          if (this.state.images.length > 0 && images.length === 0) {
-            return toast.info('No more images matching your request!');
-          }
-        })
-        .catch(error => this.setState({ error, status: 'rejected' }));
-    }, 1000);
+        this.setState(prevState => {
+          return {
+            images: [...prevState.images, ...images],
+            status: 'resolved',
+            page: prevState.page + 1,
+            loading: false,
+          };
+        });
+        if (this.state.images.length === 0) {
+          return toast.error('No images matching your request!');
+        }
+        if (this.state.images.length > 0 && images.length === 0) {
+          return toast.info('No more images matching your request!');
+        }
+      })
+      .catch(error => this.setState({ error, status: 'rejected' }));
+    // }, 1000);
   };
 
   openModal = () => {
