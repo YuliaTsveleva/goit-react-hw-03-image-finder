@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import s from './Modal.module.css';
 
-function Modal() {
+function Modal({ toClose, src, alt }) {
   return (
-    <div className={s.overlay}>
-      <div className={s.modal}>
-        <img src="" alt="" />
+    <div className={s.Overlay} onClick={toClose}>
+      <div className={s.Modal}>
+        <img src={src} alt={alt} />
       </div>
     </div>
   );
@@ -14,4 +14,8 @@ function Modal() {
 
 export default Modal;
 
-Modal.propTypes = {};
+Modal.propTypes = {
+  toClose: PropTypes.func,
+  src: PropTypes.string,
+  alt: PropTypes.string,
+};

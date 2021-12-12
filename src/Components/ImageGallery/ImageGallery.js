@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { nanoid } from 'nanoid';
 import fetchImages from '../../services/apiService';
+import Modal from '../Modal/Modal';
 
 class ImageGallery extends Component {
   state = {
@@ -17,6 +18,9 @@ class ImageGallery extends Component {
     error: null,
     status: 'idle',
     loading: false,
+    showModal: false,
+    modalUrl: '',
+    modalAlt: '',
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -79,8 +83,26 @@ class ImageGallery extends Component {
     // }, 1000);
   };
 
+  openModal = e => {
+    const targetId = +e.target.id;
+    const targetIndex = this.state.images.findIndex(
+      image => image.id === targetId,
+    );
+    console.log(targetIndex);
+    this.setState({
+      showModal: true,
+      modalUrl: this.state.images[targetIndex].largeImageURL,
+      modalAlt: this.state.images[targetIndex].tags,
+    });
+  };
+
+  closeModal = () => {
+    this.setState({ showModal: false });
+  };
+
   render() {
-    const { images, error, status, loading } = this.state;
+    const { images, error, status, loading, showModal, modalUrl, modalAlt } =
+      this.state;
 
     if (status === 'idle') {
       return <PreView />;
@@ -102,11 +124,16 @@ class ImageGallery extends Component {
               images.map(image => (
                 <ImageGalleryItem
                   key={nanoid()}
+                  id={image.id}
                   src={image.webformatURL}
                   alt={image.tags}
+                  onClick={this.openModal}
                 />
               ))}
           </ul>
+          {showModal && (
+            <Modal toClose={this.closeModal} src={modalUrl} alt={modalAlt} />
+          )}
           {images.length > 0 && !loading && <Button loadMore={this.loadMore} />}
           {loading && <Loader />}
         </>
